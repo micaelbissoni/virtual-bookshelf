@@ -7,8 +7,8 @@ import { ApplicationState } from "../../store";
 
 import * as booksActions from "../../store/ducks/books/actions";
 
-import BookForm from "../BookForm";
-import BookItem from "../BookItem";
+import BookForm from "../../components/BookForm";
+import BookList from "../../components/BookList";
 
 interface StateProps {
   books: Book[];
@@ -20,7 +20,7 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-class HomeComponent extends Component<Props> {
+class HomeContainer extends Component<Props> {
   componentDidMount() {
     const { loadRequest } = this.props;
 
@@ -33,10 +33,7 @@ class HomeComponent extends Component<Props> {
     return (
       <>
         <BookForm />
-        <ul>
-          Lista dos Livros
-          {books && books.map((book) => <BookItem key={book.id} book={book} />)}
-        </ul>
+        <BookList books={books} />
       </>
     );
   }
@@ -49,4 +46,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(booksActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);
