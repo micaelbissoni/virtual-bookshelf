@@ -7,8 +7,9 @@ import { ApplicationState } from "../../store";
 
 import * as booksActions from "../../store/ducks/books/actions";
 
-import BookForm from "../../components/BookForm";
 import BookList from "../../components/BookList";
+import BookToolbar from "../../components/BookToolbar";
+import BookFormContainer from "../BookForm";
 
 interface StateProps {
   books: Book[];
@@ -21,19 +22,39 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps;
 
 class HomeContainer extends Component<Props> {
+  state = {
+    currentCategory: "all",
+  };
+
   componentDidMount() {
     const { loadRequest } = this.props;
 
     loadRequest();
   }
 
+  changeCategory = (event: React.ChangeEvent<{}>, newValue: string) => {
+    const { currentCategory } = this.state;
+    if (currentCategory === newValue) {
+      this.setState({ currentCategory: "all" });
+    } else {
+      this.setState({ currentCategory: newValue });
+    }
+  };
+
   render() {
     const { books } = this.props;
-
+    const { currentCategory } = this.state;
+    const currentBooks = books
+      ? books.filter((book) => book.category === currentCategory)
+      : [];
     return (
       <>
-        <BookForm />
-        <BookList books={books} />
+        <BookFormContainer />
+        <BookList books={currentBooks} />
+        <BookToolbar
+          handleChange={this.changeCategory}
+          inputValue={currentCategory}
+        />
       </>
     );
   }

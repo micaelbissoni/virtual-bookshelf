@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      marginBottom: "56px",
     },
     container: {
       justifyContent: "center",
@@ -27,8 +28,8 @@ export default function BookList({ books }: OwnProps) {
       <Grid className={classes.container} container spacing={0}>
         {books &&
           books.map((book) => (
-            <Grid item spacing={0}>
-              <BookItem key={book.id} book={book} />
+            <Grid item key={book.id}>
+              <BookItem book={book} />
             </Grid>
           ))}
       </Grid>
