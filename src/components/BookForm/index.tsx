@@ -1,127 +1,159 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators, Dispatch } from "redux";
-import { v4 as uuidv4 } from "uuid";
-
+import React from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import { Button } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
+import Slide from "@material-ui/core/Slide";
+import { TransitionProps } from "@material-ui/core/transitions";
 import { Book } from "../../store/ducks/books/types";
-import { ApplicationState } from "../../store";
 
-import * as booksActions from "../../store/ducks/books/actions";
-
-import defaultBookImage from "./book-default.png";
-
-interface StateProps {}
-
-interface DispatchProps {
-  addItem(book: Book): void;
-}
-
-type Props = StateProps & DispatchProps;
-
-class BookForm extends Component<Props> {
-  state = {
-    newBook: {
-      id: uuidv4(),
-      title: "",
-      description: "",
-      timestamp: new Date(),
-      image: defaultBookImage,
-      author: "",
-      category: "",
-      deleted: false,
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    appBar: {
+      position: "relative",
     },
-    categories: [
-      {
-        label: "Default",
-        value: null,
+    root: {
+      padding: "1px 5px 10px",
+      "& > div": {
+        margin: "10px 0 15px",
       },
-      {
-        label: "Currently Reading",
-        value: "reading",
+      "& > *": {
+        width: "100%",
       },
-      {
-        label: "Want to Read",
-        value: "wantToRead ",
-      },
-      {
-        label: "Read",
-        value: "read ",
-      },
-    ],
-  };
-  constructor(props: Props) {
-    super(props);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleClearForm = this.handleClearForm.bind(this);
-  }
+    },
+    title: {
+      marginLeft: theme.spacing(2),
+      flex: 1,
+    },
+    fixedButton: {
+      position: "fixed",
+      right: "10px",
+      top: "10px",
+    },
+  })
+);
 
-  componentDidMount() {}
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & { children?: React.ReactElement },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
-  changeHandler = (event: {
-    target: { name: string; value: string | boolean };
-  }) => {
-    const { state } = this;
-    const { name, value } = event.target;
-    this.setState({
-      newBook: {
-        ...state.newBook,
-        [name]: value,
-      },
-    });
-  };
-
-  handleFormSubmit(e: { preventDefault: () => void }) {
-    this.setState({
-      newBook: {
-        ...this.state.newBook,
-        id: uuidv4(),
-      },
-    });
-    const { newBook } = this.state;
-    const { addItem } = this.props;
-
-    addItem(newBook);
-    e.preventDefault();
-  }
-
-  handleClearForm() {
-    // Logic for resetting the form
-  }
-
-  render() {
-    const { newBook } = this.state;
-
-    return (
-      <form onSubmit={this.handleFormSubmit}>
-        <label>
-          title:
-          <input
-            type="text"
-            name="title"
-            placeholder={"Enter book title"}
-            defaultValue={newBook.title}
-            onChange={this.changeHandler}
-          />
-        </label>
-        <label>
-          description:
-          <input
-            type="text"
-            name="description"
-            placeholder={"Enter book description"}
-            defaultValue={newBook.description}
-            onChange={this.changeHandler}
-          />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
+interface OwnProps {
+  newBook: Book;
+  categories: any[];
+  startForm: any;
+  changeHandler: any;
+  handleFormSubmit: any;
 }
 
-const mapStateToProps = (state: ApplicationState) => ({});
+export default function BookFormComponent({
+  newBook,
+  categories,
+  startForm,
+  changeHandler,
+  handleFormSubmit,
+}: OwnProps) {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(booksActions, dispatch);
+  const handleClickOpen = () => {
+    setOpen(true);
+    startForm();
+  };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookForm);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <div className={classes.fixedButton}>
+        <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
+          <AddIcon />
+        </Fab>
+      </div>
+      <Dialog
+        fullScreen
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+      >
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              new Book
+            </Typography>
+            <Button
+              autoFocus
+              color="inherit"
+              onClick={(evt) => {
+                handleClose();
+                handleFormSubmit(evt);
+              }}
+            >
+              save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <form
+          className={classes.root}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleFormSubmit}
+        >
+          <TextField
+            name="title"
+            label={"Enter book title"}
+            defaultValue={newBook.title}
+            onChange={changeHandler}
+          />
+          <TextField
+            multiline
+            rows={5}
+            name="description"
+            label={"Enter book description"}
+            defaultValue={newBook.description}
+            onChange={changeHandler}
+          />
+          <TextField
+            name="author"
+            label={"Enter book author"}
+            defaultValue={newBook.author}
+            onChange={changeHandler}
+          />
+          <Select
+            name="category"
+            value={newBook.category}
+            onChange={changeHandler}
+          >
+            {categories &&
+              categories.map((category) => (
+                <MenuItem key={category.value} value={category.value}>
+                  {category.label}
+                </MenuItem>
+              ))}
+          </Select>
+        </form>
+      </Dialog>
+    </div>
+  );
+}
