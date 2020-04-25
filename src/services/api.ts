@@ -1,16 +1,20 @@
 export default class Api {
   static *get(args: any) {
     try {
-      const serializedData = localStorage.getItem(args);
+      const key = args.key ? args.key : args;
+      const serializedData = JSON.parse(localStorage.getItem(key) || "[]");
 
-      if (serializedData === null) {
-        return undefined;
+      if (args.data) {
+        const searchedBook = serializedData.filter(
+          (b: any) => b.id === args.data
+        );
+        return yield Promise.resolve(searchedBook[0]);
       }
 
-      return yield Promise.resolve(JSON.parse(serializedData));
+      return yield Promise.resolve(serializedData);
     } catch (err) {
       console.warn(err);
-      return yield Promise.resolve(undefined);
+      return yield Promise.resolve(args.data ? {} : []);
     }
   }
 

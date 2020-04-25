@@ -2,45 +2,45 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 
-import { Book } from "../../store/ducks/books/types";
+import { Book } from "../../store/ducks/book/types";
 import { ApplicationState } from "../../store";
 
-import * as booksActions from "../../store/ducks/books/actions";
+import * as bookActions from "../../store/ducks/book/actions";
+import BookDetails from "../../components/BookDetails";
 
 interface StateProps {
   bookId: string;
-  books: Book[];
+  book: Book;
 }
 
 interface DispatchProps {
-  loadRequest(): void;
+  loadRequest(data: string): void;
 }
 
 type Props = StateProps & DispatchProps;
 
 class BookContainer extends Component<Props> {
   state = {
-    currentCategory: "",
+    currentBook: null,
   };
 
   componentDidMount() {
-    const { loadRequest } = this.props;
+    const { loadRequest, bookId } = this.props;
 
-    loadRequest();
+    loadRequest(bookId);
   }
 
   render() {
-    const { books, bookId } = this.props;
-    const currentBooks = books.filter((book) => book.id === bookId);
-    return <>{currentBooks[0].title}</>;
+    const { book } = this.props;
+    return <BookDetails book={book} />;
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  books: state.books.data,
+  book: state.book.data,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(booksActions, dispatch);
+  bindActionCreators(bookActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookContainer);

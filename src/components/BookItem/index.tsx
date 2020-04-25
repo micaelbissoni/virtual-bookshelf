@@ -39,7 +39,7 @@ export default function BookItem({ book }: OwnProps) {
         title={book.title}
         subheader={book.author}
       />
-      <RouterLink to={"/book/" + book.id}>
+      <RouterLink to={`/book/${book.id}`}>
         <CardMedia
           className={classes.media}
           image={book.image}
