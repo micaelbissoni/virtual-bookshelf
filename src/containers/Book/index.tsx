@@ -7,10 +7,8 @@ import { ApplicationState } from "../../store";
 
 import * as booksActions from "../../store/ducks/books/actions";
 
-import BookForm from "../BookForm";
-import BookItem from "../BookItem";
-
 interface StateProps {
+  bookId: string;
   books: Book[];
 }
 
@@ -20,7 +18,11 @@ interface DispatchProps {
 
 type Props = StateProps & DispatchProps;
 
-class HomeComponent extends Component<Props> {
+class BookContainer extends Component<Props> {
+  state = {
+    currentCategory: "",
+  };
+
   componentDidMount() {
     const { loadRequest } = this.props;
 
@@ -28,17 +30,9 @@ class HomeComponent extends Component<Props> {
   }
 
   render() {
-    const { books } = this.props;
-
-    return (
-      <>
-        <BookForm />
-        <ul>
-          Lista dos Livros
-          {books && books.map((book) => <BookItem key={book.id} book={book} />)}
-        </ul>
-      </>
-    );
+    const { books, bookId } = this.props;
+    const currentBooks = books.filter((book) => book.id === bookId);
+    return <>{currentBooks[0].title}</>;
   }
 }
 
@@ -49,4 +43,4 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(booksActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(BookContainer);
