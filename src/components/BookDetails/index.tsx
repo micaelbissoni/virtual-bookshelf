@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
     expandOpen: {
       transform: "rotate(180deg)",
     },
+    textContent: {
+      display: "flex",
+      justifyContent: "space-between",
+    },
     avatar: {
       backgroundColor: blueGrey[500],
     },
@@ -56,6 +60,7 @@ export default function BookDetails({ book }: OwnProps) {
   const [expanded, setExpanded] = React.useState(true);
 
   const handleExpandClick = () => {
+    console.log(new Date(book.timestamp).toLocaleDateString("pt-BR"));
     setExpanded(!expanded);
   };
 
@@ -88,8 +93,14 @@ export default function BookDetails({ book }: OwnProps) {
           title={book.title}
         />
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {book?.category}
+          <Typography
+            className={classes.textContent}
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
+            <span>{book?.category}</span>
+            <span>{new Date(book.timestamp).toLocaleDateString("pt-BR")}</span>
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
