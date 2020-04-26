@@ -14,14 +14,26 @@ export default class Api {
       return yield Promise.resolve(serializedData);
     } catch (err) {
       console.warn(err);
-      return yield Promise.resolve(args.data ? {} : []);
+      return yield Promise.reject(args.data ? {} : []);
     }
   }
 
   static *post(args: any) {
     try {
       let list = JSON.parse(localStorage.getItem(args.key) || "[]");
-      list.push(args.data);
+
+      const searchedBook = list.filter((b: any) => b.id === args.data.id);
+
+      if (searchedBook && searchedBook[0]) {
+        list = list.map((b: any) => {
+          if (b.id === args.data.id) {
+            return args.data;
+          }
+          return b;
+        });
+      } else {
+        list.push(args.data);
+      }
 
       const serializedData = JSON.stringify(list);
       localStorage.setItem(args.key, serializedData);
@@ -30,9 +42,10 @@ export default class Api {
       if (serializedResponse === null) {
         return undefined;
       }
-      return yield Promise.resolve(JSON.parse(serializedResponse));
+      return yield Promise.resolve(args.data);
     } catch (err) {
       console.warn(err);
+      return yield Promise.reject({});
     }
   }
 }

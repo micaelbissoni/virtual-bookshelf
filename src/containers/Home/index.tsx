@@ -16,7 +16,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  loadRequest(): void;
+  fetchBooks(): void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -27,9 +27,9 @@ class HomeContainer extends Component<Props> {
   };
 
   componentDidMount() {
-    const { loadRequest } = this.props;
+    const { fetchBooks } = this.props;
 
-    loadRequest();
+    fetchBooks();
   }
 
   changeCategory = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -61,7 +61,7 @@ class HomeContainer extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  books: state.books.data,
+  books: state.books.books,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

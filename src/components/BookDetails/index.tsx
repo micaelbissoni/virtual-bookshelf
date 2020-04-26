@@ -15,7 +15,6 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import BookmarksIcon from "@material-ui/icons/Bookmarks";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -60,7 +59,6 @@ export default function BookDetails({ book }: OwnProps) {
   const [expanded, setExpanded] = React.useState(true);
 
   const handleExpandClick = () => {
-    console.log(new Date(book.timestamp).toLocaleDateString("pt-BR"));
     setExpanded(!expanded);
   };
 
@@ -77,11 +75,6 @@ export default function BookDetails({ book }: OwnProps) {
                 </IconButton>
               </RouterLink>
             </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
           }
           title={book?.title}
           subheader={book?.author}

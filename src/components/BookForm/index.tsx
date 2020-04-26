@@ -9,6 +9,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
@@ -18,10 +19,15 @@ import { Book } from "../../store/ducks/books/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      height: 35,
+      width: "100%",
+      background: "cornflowerblue",
+    },
     appBar: {
       position: "relative",
     },
-    root: {
+    form: {
       padding: "1px 5px 10px",
       "& > div": {
         margin: "10px 0 15px",
@@ -55,6 +61,7 @@ interface OwnProps {
   startForm: any;
   changeHandler: any;
   handleFormSubmit: any;
+  isEdit: boolean;
 }
 
 export default function BookFormComponent({
@@ -63,6 +70,7 @@ export default function BookFormComponent({
   startForm,
   changeHandler,
   handleFormSubmit,
+  isEdit,
 }: OwnProps) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -77,10 +85,10 @@ export default function BookFormComponent({
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <div className={classes.fixedButton}>
         <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
-          <AddIcon />
+          {isEdit ? <EditIcon /> : <AddIcon />}
         </Fab>
       </div>
       <Dialog
@@ -115,7 +123,7 @@ export default function BookFormComponent({
           </Toolbar>
         </AppBar>
         <form
-          className={classes.root}
+          className={classes.form}
           noValidate
           autoComplete="off"
           onSubmit={handleFormSubmit}

@@ -11,16 +11,19 @@ import * as booksActions from "../../store/ducks/books/actions";
 import defaultBookImage from "./book-default.png";
 import BookFormComponent from "../../components/BookForm";
 
-interface StateProps {}
+interface StateProps {
+  book?: Book;
+}
 
 interface DispatchProps {
-  addItem(book: Book): void;
+  addBook(book: Book): any;
 }
 
 type Props = StateProps & DispatchProps;
 
 class BookFormContainer extends Component<Props> {
   initialState = {
+    isEdit: false,
     newBook: {
       id: "",
       title: "",
@@ -45,7 +48,7 @@ class BookFormContainer extends Component<Props> {
       },
       {
         label: "Want to Read",
-        value: "wantToRead ",
+        value: "wantToRead",
       },
       {
         label: "Read",
@@ -61,13 +64,31 @@ class BookFormContainer extends Component<Props> {
     this.handleClearForm = this.handleClearForm.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.book) {
+      this.setState({
+        isEdit: true,
+      });
+    }
+  }
+
   startForm = () => {
-    this.setState({
-      newBook: {
-        ...this.state.newBook,
-        id: uuidv4(),
-      },
-    });
+    if (this.props.book) {
+      this.setState({
+        isEdit: true,
+        newBook: {
+          ...this.props.book,
+        },
+      });
+    } else {
+      this.setState({
+        isEdit: false,
+        newBook: {
+          ...this.state.newBook,
+          id: uuidv4(),
+        },
+      });
+    }
   };
 
   changeHandler = (event: {
@@ -84,8 +105,8 @@ class BookFormContainer extends Component<Props> {
 
   handleFormSubmit(e: { preventDefault: () => void }) {
     const { newBook } = this.state;
-    const { addItem } = this.props;
-    addItem(newBook);
+    const { addBook } = this.props;
+    addBook(newBook);
     e.preventDefault();
     this.handleClearForm();
   }
@@ -93,11 +114,12 @@ class BookFormContainer extends Component<Props> {
   handleClearForm() {
     this.setState({
       ...this.initialState,
+      isEdit: this.state.isEdit,
     });
   }
 
   render() {
-    const { newBook, categories } = this.state;
+    const { newBook, categories, isEdit } = this.state;
 
     return (
       <BookFormComponent
@@ -106,6 +128,7 @@ class BookFormContainer extends Component<Props> {
         changeHandler={this.changeHandler}
         newBook={newBook}
         categories={categories}
+        isEdit={isEdit}
       />
     );
   }

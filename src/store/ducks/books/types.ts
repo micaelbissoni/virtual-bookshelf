@@ -1,9 +1,13 @@
 export enum BooksTypes {
-  REQUEST = "@books/REQUEST",
-  SUCCCES = "@books/SUCCCES",
-  FAILURE = "@books/FAILURE",
-  ADD_ITEM = "@books/ADD_ITEM",
-  ADD_ITEM_SUCCCES = "@books/ADD_ITEM_SUCCCES",
+  FETCH_BOOKS = "@books/FETCH_BOOKS",
+  FETCH_BOOKS_SUCCESS = "@books/FETCH_BOOKS_SUCCESS",
+  FETCH_BOOKS_FAILURE = "@books/FETCH_BOOKS_FAILURE",
+  FETCH_BOOK = "@books/FETCH_BOOK",
+  FETCH_BOOK_SUCCESS = "@books/FETCH_BOOK_SUCCESS",
+  FETCH_BOOK_FAILURE = "@books/FETCH_BOOK_FAILURE",
+  ADD_BOOK = "@books/ADD_BOOK",
+  ADD_BOOK_SUCCESS = "@books/ADD_BOOK_SUCCESS",
+  ADD_BOOK_FAILURE = "@books/ADD_BOOK_FAILURE",
 }
 
 export interface Book {
@@ -18,7 +22,8 @@ export interface Book {
 }
 
 export interface BooksState {
-  readonly data: Book[];
+  readonly book: Book;
+  readonly books: Book[];
   readonly loading: boolean;
   readonly error: boolean;
 }

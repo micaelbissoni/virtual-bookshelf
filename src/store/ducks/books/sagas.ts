@@ -1,14 +1,33 @@
 import { call, put } from "redux-saga/effects";
 import Api from "../../../services/api";
 
-import { success, failure } from "./actions";
+import {
+  fetchBooksSuccess,
+  fetchBooksFailure,
+  addBookSuccess,
+  addBookFailure,
+  fetchBookSuccess,
+  fetchBookFailure,
+} from "./actions";
 
-export function* load() {
+export function* load(data?: any) {
   try {
-    const response = yield call(Api.get, "Books");
-    yield put(success(response));
+    const payload = data && data.payload;
+    const response = yield call(Api.get, { key: "Books", data: payload });
+    yield put(fetchBooksSuccess(response));
   } catch (err) {
-    yield put(failure());
+    yield put(fetchBooksFailure());
+  }
+}
+
+export function* loadById(data: any) {
+  try {
+    const payload = data && data.payload;
+    const response = yield call(Api.get, { key: "Books", data: payload });
+
+    yield put(fetchBookSuccess(response));
+  } catch (err) {
+    yield put(fetchBookFailure());
   }
 }
 
@@ -17,8 +36,8 @@ export function* add(data: any) {
     const { payload } = data;
     const response = yield call(Api.post, { key: "Books", data: payload });
 
-    yield put(success(response));
+    yield put(addBookSuccess(response));
   } catch (err) {
-    yield put(failure());
+    yield put(addBookFailure());
   }
 }
