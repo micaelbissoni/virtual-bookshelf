@@ -8,6 +8,7 @@ import {
   addBookFailure,
   fetchBookSuccess,
   fetchBookFailure,
+  fetchBooks,
 } from "./actions";
 
 export function* load(data?: any) {
@@ -37,6 +38,7 @@ export function* add(data: any) {
     const response = yield call(Api.post, { key: "Books", data: payload });
 
     yield put(addBookSuccess(response));
+    yield put(fetchBooks());
   } catch (err) {
     yield put(addBookFailure());
   }

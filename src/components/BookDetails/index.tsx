@@ -11,14 +11,12 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { blueGrey } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import BookmarksIcon from "@material-ui/icons/Bookmarks";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Book } from "../../store/ducks/books/types";
+import CategoryIcon from "../CategoryIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -92,20 +90,11 @@ export default function BookDetails({ book }: OwnProps) {
             color="textSecondary"
             component="p"
           >
-            <span>{book?.category}</span>
             <span>{new Date(book.timestamp).toLocaleDateString("pt-BR")}</span>
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to Read">
-            <BookmarksIcon />
-          </IconButton>
-          <IconButton aria-label="add to Reading">
-            <MenuBookIcon />
-          </IconButton>
-          <IconButton aria-label="add to Favorites">
-            <FavoriteIcon />
-          </IconButton>
+          <CategoryIcon currentCategory={book?.category} />
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,

@@ -7,6 +7,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import { Link as RouterLink } from "react-router-dom";
 import { Book } from "../../store/ducks/books/types";
+import CategoryIcon from "../CategoryIcon";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -48,7 +49,7 @@ export default function BookItem({ book }: OwnProps) {
       </RouterLink>
       <CardContent className={classes.cardContent}>
         <Typography variant="body2" color="textSecondary" component="p">
-          {book.category}
+          <CategoryIcon currentCategory={book.category} />
         </Typography>
       </CardContent>
     </Card>
