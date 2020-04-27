@@ -16,7 +16,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  loadRequest(): void;
+  fetchBooks(): void;
 }
 
 type Props = StateProps & DispatchProps;
@@ -27,9 +27,9 @@ class HomeContainer extends Component<Props> {
   };
 
   componentDidMount() {
-    const { loadRequest } = this.props;
+    const { fetchBooks } = this.props;
 
-    loadRequest();
+    fetchBooks();
   }
 
   changeCategory = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -41,12 +41,24 @@ class HomeContainer extends Component<Props> {
     }
   };
 
-  render() {
+  orderBy() {
     const { books } = this.props;
     const { currentCategory } = this.state;
-    const currentBooks = books
-      ? books.filter((book) => book.category === currentCategory)
-      : [];
+    return books
+      .filter(
+        (book) => book.category === currentCategory || currentCategory === "all"
+      )
+      .sort((a, b) => {
+        if (a.category === "all") {
+          return -1;
+        }
+        return 0;
+      });
+  }
+
+  render() {
+    const { currentCategory } = this.state;
+    const currentBooks = this.orderBy();
     return (
       <>
         <BookFormContainer />
@@ -61,7 +73,7 @@ class HomeContainer extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  books: state.books.data,
+  books: state.books.books,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>

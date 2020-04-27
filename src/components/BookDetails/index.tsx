@@ -11,15 +11,12 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { blueGrey } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import BookmarksIcon from "@material-ui/icons/Bookmarks";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Book } from "../../store/ducks/books/types";
+import CategoryIcon from "../CategoryIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,6 +37,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     expandOpen: {
       transform: "rotate(180deg)",
+    },
+    textContent: {
+      display: "flex",
+      justifyContent: "space-between",
     },
     avatar: {
       backgroundColor: blueGrey[500],
@@ -73,11 +74,6 @@ export default function BookDetails({ book }: OwnProps) {
               </RouterLink>
             </Avatar>
           }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
           title={book?.title}
           subheader={book?.author}
         />
@@ -88,20 +84,17 @@ export default function BookDetails({ book }: OwnProps) {
           title={book.title}
         />
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {book?.category}
+          <Typography
+            className={classes.textContent}
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
+            <span>{new Date(book.timestamp).toLocaleDateString("pt-BR")}</span>
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to Read">
-            <BookmarksIcon />
-          </IconButton>
-          <IconButton aria-label="add to Reading">
-            <MenuBookIcon />
-          </IconButton>
-          <IconButton aria-label="add to Favorites">
-            <FavoriteIcon />
-          </IconButton>
+          <CategoryIcon currentCategory={book?.category} />
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,

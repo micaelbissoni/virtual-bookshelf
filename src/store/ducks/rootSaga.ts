@@ -1,15 +1,12 @@
 import { all, takeLatest } from "redux-saga/effects";
 
 import { BooksTypes } from "./books/types";
-import { load, add } from "./books/sagas";
-
-import { BookTypes } from "./book/types";
-import { load as loadBook } from "./book/sagas";
+import { load, loadById, add } from "./books/sagas";
 
 export default function* rootSaga() {
   return yield all([
-    takeLatest(BooksTypes.REQUEST, load),
-    takeLatest(BooksTypes.ADD_ITEM, add),
-    takeLatest(BookTypes.REQUEST, loadBook),
+    takeLatest(BooksTypes.FETCH_BOOKS, load),
+    takeLatest(BooksTypes.FETCH_BOOK, loadById),
+    takeLatest(BooksTypes.ADD_BOOK, add),
   ]);
 }

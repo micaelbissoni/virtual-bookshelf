@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { Redirect } from "react-router-dom";
 
-import { Book } from "../../store/ducks/book/types";
+import { Book } from "../../store/ducks/books/types";
 import { ApplicationState } from "../../store";
 
-import * as bookActions from "../../store/ducks/book/actions";
+import * as booksActions from "../../store/ducks/books/actions";
+import BookFormContainer from "../BookForm";
 import BookDetails from "../../components/BookDetails";
 
 interface StateProps {
@@ -14,33 +16,37 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  loadRequest(data: string): void;
+  fetchBook(data: string): void;
 }
 
 type Props = StateProps & DispatchProps;
 
 class BookContainer extends Component<Props> {
-  state = {
-    currentBook: null,
-  };
-
   componentDidMount() {
-    const { loadRequest, bookId } = this.props;
+    const { fetchBook, bookId } = this.props;
 
-    loadRequest(bookId);
+    fetchBook(bookId);
   }
 
   render() {
     const { book } = this.props;
-    return <BookDetails book={book} />;
+    if (!book || book.id === "") {
+      return <Redirect to="/" />;
+    }
+    return (
+      <>
+        <BookFormContainer book={book} />
+        <BookDetails book={book} />
+      </>
+    );
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  book: state.book.data,
+  book: state.books.book,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(bookActions, dispatch);
+  bindActionCreators(booksActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookContainer);
