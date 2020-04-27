@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textContent: {
       display: "flex",
-      justifyContent: "space-between",
+      justifyContent: "center",
     },
     avatar: {
       backgroundColor: blueGrey[500],
@@ -90,7 +90,15 @@ export default function BookDetails({ book }: OwnProps) {
             color="textSecondary"
             component="p"
           >
-            <span>{new Date(book.timestamp).toLocaleDateString("pt-BR")}</span>
+            <div>
+              {new Date(book.timestamp).toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </div>
           </Typography>
         </CardContent>
         <CardActions disableSpacing>

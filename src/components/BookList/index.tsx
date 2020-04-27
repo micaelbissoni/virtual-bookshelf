@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      marginBottom: "56px",
+      margin: "15px 0 50px;",
     },
     container: {
       justifyContent: "center",

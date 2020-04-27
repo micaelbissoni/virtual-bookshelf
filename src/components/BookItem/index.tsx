@@ -49,6 +49,15 @@ export default function BookItem({ book }: OwnProps) {
       </RouterLink>
       <CardContent className={classes.cardContent}>
         <Typography variant="body2" color="textSecondary" component="p">
+          <span>
+            {new Date(book.timestamp).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            })}
+          </span>
           <CategoryIcon currentCategory={book.category} />
         </Typography>
       </CardContent>

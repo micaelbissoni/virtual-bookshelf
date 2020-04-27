@@ -46,9 +46,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 1,
     },
     fixedButton: {
+      width: "100vw",
+      height: 0,
+      top: 25,
       position: "fixed",
-      right: "10px",
-      top: "10px",
+      display: "flex",
+      justifyContent: "center",
     },
   })
 );
