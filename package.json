@@ -1,9 +1,9 @@
 {
   "name": "virtual-bookshelf",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Micael Bissoni",
   "private": true,
-  "homepage": "http://micaelbissoni.github.io/virtual-bookshelf",
+  "homepage": "https://micaelbissoni.github.io/virtual-bookshelf",
   "dependencies": {
     "@material-ui/core": "^4.9.11",
     "@material-ui/icons": "^4.9.1",
@@ -33,8 +33,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
