@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { v4 as uuidv4 } from "uuid";
 
-import { Book } from "../../store/ducks/books/types";
+import { Book, Category } from "../../store/ducks/books/types";
 import { ApplicationState } from "../../store";
 
 import * as booksActions from "../../store/ducks/books/actions";
@@ -13,6 +13,8 @@ import BookFormComponent from "../../components/BookForm";
 
 interface StateProps {
   book?: Book;
+  initialBook: Book;
+  categories: Category[];
 }
 
 interface DispatchProps {
@@ -24,37 +26,11 @@ type Props = StateProps & DispatchProps;
 class BookFormContainer extends Component<Props> {
   initialState = {
     isEdit: false,
-    newBook: {
-      id: "",
-      title: "",
-      description: "",
-      timestamp: new Date(),
-      image: defaultBookImage,
-      author: "",
-      category: "all",
-      deleted: false,
-    },
+    newBook: this.props.initialBook,
+    categories: [...this.props.categories],
   };
 
   state = {
-    categories: [
-      {
-        label: "Default",
-        value: "all",
-      },
-      {
-        label: "Currently Reading",
-        value: "reading",
-      },
-      {
-        label: "Want to Read",
-        value: "wantToRead",
-      },
-      {
-        label: "Read",
-        value: "read",
-      },
-    ],
     ...this.initialState,
   };
 
@@ -86,19 +62,21 @@ class BookFormContainer extends Component<Props> {
         newBook: {
           ...this.state.newBook,
           id: uuidv4(),
+          image: defaultBookImage,
+          timestamp: new Date(),
         },
       });
     }
   };
 
   changeHandler = (event: {
-    target: { name: string; value: string | boolean };
+    target: { name: string; value: string; checked: boolean; type: string };
   }) => {
-    const { name, value } = event.target;
+    const { name, value, checked, type } = event.target;
     this.setState({
       newBook: {
         ...this.state.newBook,
-        [name]: value,
+        [name]: type === "checkbox" ? checked : value,
       },
     });
   };
@@ -120,7 +98,6 @@ class BookFormContainer extends Component<Props> {
 
   render() {
     const { newBook, categories, isEdit } = this.state;
-
     return (
       <BookFormComponent
         startForm={this.startForm}
@@ -134,7 +111,10 @@ class BookFormContainer extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState) => ({});
+const mapStateToProps = (state: ApplicationState) => ({
+  initialBook: state.books.newBook,
+  categories: state.books.categories,
+});
 
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(booksActions, dispatch);

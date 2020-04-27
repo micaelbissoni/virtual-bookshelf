@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
+import { Redirect } from "react-router-dom";
 
 import { Book } from "../../store/ducks/books/types";
 import { ApplicationState } from "../../store";
@@ -29,6 +30,9 @@ class BookContainer extends Component<Props> {
 
   render() {
     const { book } = this.props;
+    if (!book || book.id === "") {
+      return <Redirect to="/" />;
+    }
     return (
       <>
         <BookFormContainer book={book} />

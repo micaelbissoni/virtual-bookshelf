@@ -6,6 +6,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { Button } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Delete from "@material-ui/icons/Delete";
+import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
+
 import MenuItem from "@material-ui/core/MenuItem";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -118,7 +123,7 @@ export default function BookFormComponent({
                 handleFormSubmit(evt);
               }}
             >
-              save
+              {newBook.deleted ? "Delete" : "save"}
             </Button>
           </Toolbar>
         </AppBar>
@@ -160,6 +165,20 @@ export default function BookFormComponent({
                 </MenuItem>
               ))}
           </Select>
+          {isEdit && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  icon={<DeleteOutlined />}
+                  checkedIcon={<Delete />}
+                  name="deleted"
+                  checked={newBook.deleted}
+                  onChange={changeHandler}
+                />
+              }
+              label="Delete this book"
+            />
+          )}
         </form>
       </Dialog>
     </div>

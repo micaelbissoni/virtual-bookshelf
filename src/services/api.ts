@@ -1,3 +1,5 @@
+import { Book } from "../store/ducks/books/types";
+
 export default class Api {
   static *get(args: any) {
     try {
@@ -8,10 +10,15 @@ export default class Api {
         const searchedBook = serializedData.filter(
           (b: any) => b.id === args.data
         );
+        if (searchedBook && searchedBook[0] && searchedBook[0].deleted) {
+          return yield Promise.reject({});
+        }
         return yield Promise.resolve(searchedBook[0]);
       }
 
-      return yield Promise.resolve(serializedData);
+      return yield Promise.resolve(
+        serializedData.filter((b: Book) => !b.deleted)
+      );
     } catch (err) {
       console.warn(err);
       return yield Promise.reject(args.data ? {} : []);
@@ -41,6 +48,10 @@ export default class Api {
       const serializedResponse = localStorage.getItem(args.key);
       if (serializedResponse === null) {
         return undefined;
+      }
+
+      if (args.data.deleted) {
+        return yield Promise.reject({});
       }
       return yield Promise.resolve(args.data);
     } catch (err) {

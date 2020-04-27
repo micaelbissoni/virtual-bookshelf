@@ -14,4 +14,5 @@ export const fetchBookFailure = () => action(BooksTypes.FETCH_BOOK_FAILURE);
 export const addBook = (data: Book) => action(BooksTypes.ADD_BOOK, data);
 export const addBookSuccess = (data: Book) =>
   action(BooksTypes.ADD_BOOK_SUCCESS, { data });
-export const addBookFailure = () => action(BooksTypes.ADD_BOOK_FAILURE);
+export const addBookFailure = (data: any) =>
+  action(BooksTypes.ADD_BOOK_FAILURE, data);

@@ -40,6 +40,6 @@ export function* add(data: any) {
     yield put(addBookSuccess(response));
     yield put(fetchBooks());
   } catch (err) {
-    yield put(addBookFailure());
+    yield put(addBookFailure({}));
   }
 }

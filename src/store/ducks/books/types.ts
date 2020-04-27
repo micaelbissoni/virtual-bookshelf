@@ -10,6 +10,11 @@ export enum BooksTypes {
   ADD_BOOK_FAILURE = "@books/ADD_BOOK_FAILURE",
 }
 
+export interface Category {
+  label: string;
+  value: string;
+}
+
 export interface Book {
   id: string;
   title: string;
@@ -22,6 +27,8 @@ export interface Book {
 }
 
 export interface BooksState {
+  readonly categories: Category[];
+  readonly newBook: Book;
   readonly book: Book;
   readonly books: Book[];
   readonly loading: boolean;
